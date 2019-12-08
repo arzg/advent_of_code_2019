@@ -1,15 +1,31 @@
 use std::str::FromStr;
 
 const INPUT: &str = include_str!("day_2_input");
+const DESIRED_OUTPUT: u32 = 19_690_720;
 
 fn main() {
-    let mut memory: Vec<_> = INPUT
+    let memory: Vec<_> = INPUT
         .trim()
         .split(',')
         .map(|i| u32::from_str(i).unwrap())
         .collect();
 
-    println!("{}", parse(&mut memory));
+    for noun in 0..=99 {
+        for verb in 0..=99 {
+            let mut memory = memory.clone();
+            add_inputs(noun, verb, &mut memory);
+
+            if DESIRED_OUTPUT == parse(&mut memory) {
+                println!("{}", 100 * noun + verb);
+                return;
+            }
+        }
+    }
+}
+
+fn add_inputs(noun: u32, verb: u32, memory: &mut [u32]) {
+    memory[1] = noun;
+    memory[2] = verb;
 }
 
 fn parse(mut memory: &mut [u32]) -> u32 {
